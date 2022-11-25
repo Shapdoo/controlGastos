@@ -17,6 +17,7 @@ export default function NuevoPresupuesto({
         //Si no es un numero O si es menor a 0
         if(!Number(budget) || Number(budget) < 0){
             setMessage('No es un presupuesto válido.')
+            setBudget(0)
             return
         }
 
