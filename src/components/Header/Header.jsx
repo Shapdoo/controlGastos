@@ -4,6 +4,8 @@ import NuevoPresupuesto from "../NuevoPresupuesto/NuevoPresupuesto";
 import BudgetControl from "../BudgetControl/BudgetControl";
 
 export default function Header({
+  setBills,
+  bills,
   budget,
   setBudget,
   isValidBudget,
@@ -18,7 +20,7 @@ export default function Header({
       retornas el componente de nuevo prespuesto */}
 
       {isValidBudget ? (
-        <BudgetControl budget={budget}/>
+        <BudgetControl budget={budget} bills={bills} setBills={setBills} setBudget={setBudget} setIsValidBudget={setIsValidBudget}/>
       ) : (
         <NuevoPresupuesto
           budget={budget}

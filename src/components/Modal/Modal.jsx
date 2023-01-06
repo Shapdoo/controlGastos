@@ -1,6 +1,6 @@
 //REACT
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //COMPONENTS
 import FloatButton from "../FloatButton/FloatButton";
@@ -14,16 +14,32 @@ export default function Modal({
   setModalOpen,
   modalAnimate,
   setModalAnimated,
-  saveBills
+  saveBills,
+  editBill,
+  setEditBill
 }) {
   const [name, setName] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [category, setCategory] = useState("");
-  const [message, setMessage] = useState(false)
+  const [id, setId] = useState("")
+  const [date, setDate] = useState("")
+
+  //Validation
+  const [message, setMessage] = useState(false);
+
+  useEffect(() => {
+    if (Object.keys(editBill).length > 0) {
+      setName(editBill.name);
+      setQuantity(editBill.quantity);
+      setCategory(editBill.category);
+      setId(editBill.id)
+      setDate(editBill.date)
+    }
+  }, []);
 
   const handleCloseModal = () => {
     setModalOpen(false);
-
+    setEditBill({})
     setTimeout(() => {
       setModalAnimated(false);
     }, 500);
@@ -31,22 +47,21 @@ export default function Modal({
 
   //Enviando el formulario
   const handleSubmit = (e) => {
-    e.preventDefault()
-    const inputsAreEmpty = [name, quantity, category].includes("")
+    e.preventDefault();
+    const inputsAreEmpty = [name, quantity, category].includes("");
 
-    if(inputsAreEmpty){
-      setMessage("Todos los campos son obligatorios.")
+    if (inputsAreEmpty) {
+      setMessage("Todos los campos son obligatorios.");
 
       setTimeout(() => {
-        setMessage("")
+        setMessage("");
       }, 3000);
 
       return;
     }
 
-    saveBills({name, quantity, category})
-
-  }
+    saveBills({ name, quantity: Number(quantity), category, id, date });
+  };
   return (
     <div className="modal">
       <FloatButton
@@ -56,11 +71,13 @@ export default function Modal({
         action={handleCloseModal}
       />
 
-      <form className={`formulario ${modalAnimate ? "animar" : "cerrar"}`} onSubmit={handleSubmit}>
-        <legend>Nuevo Gasto</legend>
-
+      <form
+        className={`formulario ${modalAnimate ? "animar" : "cerrar"}`}
+        onSubmit={handleSubmit}
+      >
+        <legend>{ editBill.name ? "Editar Gasto" : "Nuevo Gasto"}</legend>
         {/* Validation Message */}
-        { message && <Message typeMessage="error">{message}</Message> }
+        {message && <Message typeMessage="error">{message}</Message>}
 
         <div className="campo">
           <label htmlFor="name">Nombre</label>
@@ -95,18 +112,17 @@ export default function Modal({
               --Seleccione--
             </option>
 
-            { options.map((option) => {
+            {options.map((option) => {
               return (
                 <option key={option.id} value={option.value}>
                   {option.label}
                 </option>
               );
-            }) }
-
+            })}
           </select>
         </div>
 
-        <input type="submit" value="Añadir Gasto" />
+        <input type="submit" value={editBill.name ? "Guardar Cambios" : "Añadir Gasto"} />
       </form>
     </div>
   );
