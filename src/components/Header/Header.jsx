@@ -20,7 +20,13 @@ export default function Header({
       retornas el componente de nuevo prespuesto */}
 
       {isValidBudget ? (
-        <BudgetControl budget={budget} bills={bills} setBills={setBills} setBudget={setBudget} setIsValidBudget={setIsValidBudget}/>
+        <BudgetControl
+          budget={budget}
+          bills={bills}
+          setBills={setBills}
+          setBudget={setBudget}
+          setIsValidBudget={setIsValidBudget}
+        />
       ) : (
         <NuevoPresupuesto
           budget={budget}
@@ -29,6 +35,5 @@ export default function Header({
         />
       )}
     </header>
-    
   );
 }
